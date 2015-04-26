@@ -10,6 +10,7 @@ var connect = require('gulp-connect');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var sourcemaps = require('gulp-sourcemaps');
+var nodemon = require('gulp-nodemon');
 
 var params = require('./parameters');
 
@@ -60,7 +61,17 @@ gulp.task('style', function() {
 
 gulp.task('dev', ['js', 'jade', 'templates', 'style']);
 
-gulp.task('watch', ['dev', 'connect'], function() {
+gulp.task('nodemon', function() {
+  nodemon({
+    script: 'server.js',
+    debug: true,
+    env: {
+      NODE_ENV: "development"
+    },
+  });
+});
+
+gulp.task('watch', ['dev', 'connect', 'nodemon'], function() {
   watch(params.app_dir + params.jade, function() {
     gulp.start('jade');
   });
@@ -74,4 +85,3 @@ gulp.task('watch', ['dev', 'connect'], function() {
     gulp.start('style');
   });
 });
-
