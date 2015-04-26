@@ -6,7 +6,6 @@ var sass = require('gulp-sass');
 var plumber = require('gulp-plumber');
 var debug = require('gulp-debug');
 var templateCache = require('gulp-angular-templatecache');
-var connect = require('gulp-connect');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var sourcemaps = require('gulp-sourcemaps');
@@ -37,12 +36,6 @@ gulp.task('templates', function() {
     .pipe(gulp.dest(params.build_dir));
 });
 
-gulp.task('connect', function() {
-  connect.server({
-    root: params.build_dir
-  });
-});
-
 gulp.task('js', function() {
   gulp.src(params.app_dir + params.js)
     .pipe(sourcemaps.init())
@@ -71,7 +64,7 @@ gulp.task('nodemon', function() {
   });
 });
 
-gulp.task('watch', ['dev', 'connect', 'nodemon'], function() {
+gulp.task('watch', ['dev', 'nodemon'], function() {
   watch(params.app_dir + params.jade, function() {
     gulp.start('jade');
   });
