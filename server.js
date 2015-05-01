@@ -28,6 +28,21 @@ app.get('/page', function(req, res) {
   });
 });
 
+app.get('/provide', function(req, res) {
+  var url = req.query.url;
+  console.time(url);
+  request({
+    url: url,
+    encoding: null
+  }, function(err, result, body) {
+    if (!err && result.statusCode == 200) {
+      res.send(body);
+    } else {
+      throw new Error('Can not download image');
+    }
+  });
+});
+
 app.use(express.static('public'));
 
 var server = app.listen(3000, function() {

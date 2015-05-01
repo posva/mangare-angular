@@ -1,7 +1,7 @@
 var app = angular.module('Mangare', ['ngMaterial', 'ngMdIcons']);
 
-app.controller('AppCtrl', ['$scope', '$q', '$http',
-  function($scope, $q, $http) {
+app.controller('AppCtrl', ['$scope', '$q', '$http', 'MangaReader',
+  function($scope, $q, $http, MangaReader) {
     logoIcons = ['book', 'bookmark_outline', 'insert_emoticon', 'tablet'];
     logoIconIndex = 0;
     $scope.logoIcon = logoIcons[logoIconIndex];
@@ -11,6 +11,11 @@ app.controller('AppCtrl', ['$scope', '$q', '$http',
       $scope.logoIcon = logoIcons[logoIconIndex];
       $scope.$apply();
     }, 1500);
+
+    $scope.list = 'loading';
+    MangaReader.getList().then(function(list) {
+      $scope.list = list;
+    });
 
     var manga = {
       name: 'Hunter X Hunter',
