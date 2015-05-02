@@ -1,6 +1,5 @@
-var app = angular.module('Mangare', ['ngMaterial', 'ngMdIcons']);
-
-app.controller('AppCtrl', ['$scope', '$q', '$http', 'MangaReader',
+angular.module('Mangare').
+controller('AppCtrl', ['$scope', '$q', '$http', 'MangaReader',
   function($scope, $q, $http, MangaReader) {
     logoIcons = ['book', 'bookmark_outline', 'insert_emoticon', 'tablet'];
     logoIconIndex = 0;
@@ -12,9 +11,11 @@ app.controller('AppCtrl', ['$scope', '$q', '$http', 'MangaReader',
       $scope.$apply();
     }, 1500);
 
-    $scope.list = 'loading';
+    $scope.mangaList = [];
+    $scope.searchManga = '';
+    $scope.fuseFilter = false;
     MangaReader.getList().then(function(list) {
-      $scope.list = list;
+      $scope.mangaList = list;
     });
 
     var manga = {
@@ -106,16 +107,16 @@ app.controller('AppCtrl', ['$scope', '$q', '$http', 'MangaReader',
     $scope.downloadedPages = 0;
     $scope.builtPages = 0;
 
-    chapter.pages.forEach(function(url, index) {
-      downloadImageAsBase64(url, function(encoded) {
-        $scope.pages[index] = {
-          data: encoded,
-          dimensions: null,
-          type: null
-        };
-        writeTypeOfPage($scope.pages[index]);
-      });
-    });
+    //chapter.pages.forEach(function(url, index) {
+    //downloadImageAsBase64(url, function(encoded) {
+    //$scope.pages[index] = {
+    //data: encoded,
+    //dimensions: null,
+    //type: null
+    //};
+    //writeTypeOfPage($scope.pages[index]);
+    //});
+    //});
 
     $scope.downloadPDF = function() {
       generatePDF($scope.pages);

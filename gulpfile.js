@@ -36,8 +36,13 @@ gulp.task('templates', function() {
     .pipe(gulp.dest(params.build_dir));
 });
 
+var jsFiles = params.js.map(function(file, index, files) {
+  return params.app_dir + files[index];
+});
+
 gulp.task('js', function() {
-  gulp.src(params.app_dir + params.js)
+  gulp.src(jsFiles)
+  .pipe(debug())
     .pipe(sourcemaps.init())
     .pipe(concat(params.build_file))
     .pipe(sourcemaps.write())
@@ -57,6 +62,7 @@ gulp.task('dev', ['js', 'jade', 'templates', 'style']);
 gulp.task('nodemon', function() {
   nodemon({
     script: 'server.js',
+    watch: 'server.js',
     debug: true,
     env: {
       NODE_ENV: "development"
@@ -71,7 +77,7 @@ gulp.task('watch', ['dev', 'nodemon'], function() {
   watch(params.app_dir + params.templates, function() {
     gulp.start('templates');
   });
-  watch(params.app_dir + params.js, function() {
+  watch(jsFiles, function() {
     gulp.start('js');
   });
   watch(params.app_dir + params.scss, function() {

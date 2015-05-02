@@ -29,7 +29,7 @@ app.get('/page', function(req, res) {
 });
 
 app.get('/provide', function(req, res) {
-  var url = req.query.url;
+  var url = decodeURI(req.query.url);
   console.time(url);
   request({
     url: url,
