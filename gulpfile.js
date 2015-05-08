@@ -84,7 +84,7 @@ gulp.task('deploy', ['production'], function() {
     .pipe(deploy({
       branch: 'build',
       force: true,
-      push: false,
+      origin: "git@github.com:posva/mangare.git",
       message: 'Update ' + new Date().toISOString() + ' --skip-ci'
     }));
 });
