@@ -4,7 +4,7 @@
   "description": "Create Manga PDF, epubs, and other",
   "private": true,
   "scripts": {
-    "postinstall": "bower install"
+    "test": "echo TODO"
   },
   "repository": {
     "type": "git",
