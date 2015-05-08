@@ -42,7 +42,6 @@ var jsFiles = params.js.map(function(file, index, files) {
 
 gulp.task('js', function() {
   gulp.src(jsFiles)
-  .pipe(debug())
     .pipe(sourcemaps.init())
     .pipe(concat(params.build_file))
     .pipe(sourcemaps.write())

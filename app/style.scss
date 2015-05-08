@@ -19,6 +19,12 @@ md-list .md-button {
   max-width: 128px;
 }
 
+#manga-list md-item button,
+#chapter-list md-item button,
+{
+  margin: 0px !important;
+}
+
 /* Using Data-URI converted from svg until <md-icon> becomes available
 https://github.com/google/material-design-icons
 */

@@ -1,6 +1,6 @@
 angular.module('Mangare').
-controller('AppCtrl', ['$scope', '$q', '$http', 'MangaReader',
-  function($scope, $q, $http, MangaReader) {
+controller('AppCtrl', ['$scope', '$q', '$http', 'MangaReader', '$mdDialog',
+  function($scope, $q, $http, MangaReader, $mdDialog) {
     logoIcons = ['book', 'bookmark_outline', 'insert_emoticon', 'tablet'];
     logoIconIndex = 0;
     $scope.logoIcon = logoIcons[logoIconIndex];
@@ -14,42 +14,28 @@ controller('AppCtrl', ['$scope', '$q', '$http', 'MangaReader',
     $scope.mangaList = [];
     $scope.searchManga = '';
     $scope.fuseFilter = false;
+    $scope.listLimit = 10;
     MangaReader.getList().then(function(list) {
       $scope.mangaList = list;
     });
 
-    var manga = {
-      name: 'Hunter X Hunter',
-      alternate: 'HxH',
-      year: 1998,
-      status: 'ongoing',
-      author: 'Togashi, Yoshihiro',
-      artist: 'Togashi, Yoshihiro',
-      genres: [
-        'action',
-        'adventure',
-        'comedy',
-        'fantasy',
-        'shounen',
-        'super power'
-      ],
-      chapters: 349,
+    $scope.goToManga = function(manga) {
+      MangaReader.getManga(manga).then(function(manga) {
+        $scope.manga = manga;
+      });
     };
 
-    var chapter = {
-      title: 'Chapter 4: The Monstrous Red -fox',
-      pages: [
-        'http://i32.mangareader.net/hunter-x-hunter/4/hunter-x-hunter-1638649.jpg',
-        'http://i28.mangareader.net/hunter-x-hunter/4/hunter-x-hunter-1638651.jpg',
-        'http://i12.mangareader.net/hunter-x-hunter/4/hunter-x-hunter-1638653.jpg',
-        'http://i12.mangareader.net/hunter-x-hunter/4/hunter-x-hunter-1638655.jpg',
-        'http://i11.mangareader.net/naruto/688/naruto-5102197.jpg'
-      ]
+    $scope.searchChapter = '';
+    $scope.chapterFuseFilter = false;
+    $scope.chapterSearchLimit = 10;
+    $scope.chapter = null;
+    $scope.goToChapter = function(chapter) {
+      MangaReader.getChapter(chapter).then(function(chapter) {
+        $scope.downloadedPages = 0;
+        $scope.builtPages = 0;
+        $scope.chapter = chapter;
+      });
     };
-
-    $scope.chapter = chapter;
-
-    $scope.pages = [];
 
     var downloadImageAsBase64 = function(url, callback) {
       $http.get('/page?url=' + url)
@@ -103,20 +89,19 @@ controller('AppCtrl', ['$scope', '$q', '$http', 'MangaReader',
       });
     };
 
-    $scope.totalPages = chapter.pages.length;
-    $scope.downloadedPages = 0;
-    $scope.builtPages = 0;
-
-    //chapter.pages.forEach(function(url, index) {
-    //downloadImageAsBase64(url, function(encoded) {
-    //$scope.pages[index] = {
-    //data: encoded,
-    //dimensions: null,
-    //type: null
-    //};
-    //writeTypeOfPage($scope.pages[index]);
-    //});
-    //});
+    $scope.downloadPages = function(chapter) {
+      $scope.pages = [];
+      chapter.pages.forEach(function(url, index) {
+        downloadImageAsBase64(url, function(encoded) {
+          $scope.pages[index] = {
+            data: encoded,
+            dimensions: null,
+            type: null
+          };
+          writeTypeOfPage($scope.pages[index]);
+        });
+      });
+    };
 
     $scope.downloadPDF = function() {
       generatePDF($scope.pages);
