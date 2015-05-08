@@ -10,6 +10,7 @@ var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var sourcemaps = require('gulp-sourcemaps');
 var nodemon = require('gulp-nodemon');
+var deploy = require('gulp-gh-pages');
 
 var params = require('./parameters');
 
@@ -56,6 +57,11 @@ gulp.task('style', function() {
     .pipe(gulp.dest(params.build_dir));
 });
 
+gulp.task('production', function() {
+  params.build_dir = './www/' + params.build_dir;
+  gulp.start('build');
+});
+
 gulp.task('build', ['js', 'jade', 'templates', 'style']);
 
 gulp.task('nodemon', function() {
@@ -67,6 +73,20 @@ gulp.task('nodemon', function() {
       NODE_ENV: "development"
     },
   });
+});
+
+gulp.task('deploy', ['production'], function() {
+  return gulp.src([
+    'www/**/*',
+    'server.js',
+    'package.json'
+    ])
+    .pipe(deploy({
+      branch: 'build',
+      force: true,
+      push: false,
+      message: 'Update ' + new Date().toISOString() + ' --skip-ci'
+    }));
 });
 
 gulp.task('watch', ['build', 'nodemon'], function() {
