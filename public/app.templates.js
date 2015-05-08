@@ -1,0 +1,1 @@
+angular.module("templates", []).run(["$templateCache", function($templateCache) {$templateCache.put("page/view.html","<div class=\"page\"><p>Hello</p></div>");}]);
