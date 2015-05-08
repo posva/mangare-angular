@@ -4,7 +4,8 @@
   "description": "Create Manga PDF, epubs, and other",
   "private": true,
   "scripts": {
-    "test": "echo TODO"
+    "test": "echo TODO",
+    "build": "gulp build"
   },
   "repository": {
     "type": "git",

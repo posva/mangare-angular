@@ -56,7 +56,7 @@ gulp.task('style', function() {
     .pipe(gulp.dest(params.build_dir));
 });
 
-gulp.task('dev', ['js', 'jade', 'templates', 'style']);
+gulp.task('build', ['js', 'jade', 'templates', 'style']);
 
 gulp.task('nodemon', function() {
   nodemon({
@@ -69,7 +69,7 @@ gulp.task('nodemon', function() {
   });
 });
 
-gulp.task('watch', ['dev', 'nodemon'], function() {
+gulp.task('watch', ['build', 'nodemon'], function() {
   watch(params.app_dir + params.jade, function() {
     gulp.start('jade');
   });
